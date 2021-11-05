@@ -1,26 +1,41 @@
 <template>
   <div class="signUp">
-    <form>
-      <div class="form-container">
-        <dl>
-          <dt><label for="email">メールアドレス</label></dt>
-          <dd><input type="text" id="email" name="email" v-model="email" placeholder="abc@example.com" required></dd>
-        </dl>
-        <dl>
-          <dt><label for="password">パスワード（6文字以上の英数字）</label></dt>
-          <dd><input type="password" id="password" name="password" v-model="password" required></dd>
-        </dl>
-        <dl>
-          <dt><label for="confirmPassword">パスワード（確認用）</label></dt>
-          <dd><input type="password" id="confirmPassword" name="confirmPassword" v-model="confirmPassword" required></dd>
-        </dl>
-        <dl>
-          <dt><label for="username">名前</label></dt>
-          <dd><input type="text" id="username" name="username" v-model="username" required></dd>
-        </dl>
-      </div>
-      <button type="button" @click="handleSignUp">登録</button>
-    </form>
+    <v-app>
+      <v-card>
+        <v-card-title>
+          <v-form v-model="valid">
+              <v-text-field
+                type="email"
+                v-model="email"
+                :rules="emailRules"
+                label="メールアドレス"
+                required
+              ></v-text-field>
+              <v-text-field
+                type="password"
+                v-model="password"
+                :rules="passwordRules"
+                label="パスワード"
+                required
+              ></v-text-field>
+              <v-text-field
+                type="password"
+                v-model="confirmPassword"
+                label="パスワード（確認用）"
+                required
+              ></v-text-field>
+              <v-text-field
+                type="text"
+                v-model="username"
+                :rules="usernameRules"
+                label="名前"
+                required
+              ></v-text-field>
+            <v-btn type="button" @click="handleSignUp" color="success">登録</v-btn>
+          </v-form>
+        </v-card-title>
+      </v-card>
+    </v-app>
   </div>
 </template>
 
@@ -31,10 +46,21 @@ import { db } from "../../plugins/firebase"
 export default {
   data() {
     return {
+      valid: false,
       email: "",
       password: "",
       confirmPassword: "",
-      username: ""
+      username: "",
+      emailRules: [
+        v => !!v || "メールアドレスは必須です。",
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
+      passwordRules: [
+        v => !!v || "パスワードは必須です。"
+      ],
+      usernameRules: [
+         v => !!v || "名前は必須です。"
+      ]
     }
   },
   methods: {
