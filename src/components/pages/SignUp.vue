@@ -1,40 +1,39 @@
 <template>
   <div class="signUp">
     <v-app>
-      <v-card>
-        <v-card-title>
-          <v-form v-model="valid">
-              <v-text-field
-                type="email"
-                v-model="email"
-                :rules="emailRules"
-                label="メールアドレス"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="password"
-                v-model="password"
-                :rules="passwordRules"
-                label="パスワード"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="password"
-                v-model="confirmPassword"
-                label="パスワード（確認用）"
-                required
-              ></v-text-field>
-              <v-text-field
-                type="text"
-                v-model="username"
-                :rules="usernameRules"
-                label="名前"
-                required
-              ></v-text-field>
-            <v-btn type="button" @click="handleSignUp" color="success">登録</v-btn>
-          </v-form>
-        </v-card-title>
-      </v-card>
+      <v-card class="card-wrapper">
+        <v-card-title class="card-title">新規登録</v-card-title>
+        <v-form v-model="valid" class="card-form">
+            <v-text-field
+              type="email"
+              v-model="email"
+              :rules="emailRules"
+              label="メールアドレス"
+              required
+            ></v-text-field>
+            <v-text-field
+              type="password"
+              v-model="password"
+              :rules="passwordRules"
+              label="パスワード"
+              required
+            ></v-text-field>
+            <v-text-field
+              type="password"
+              v-model="confirmPassword"
+              label="パスワード（確認用）"
+              required
+            ></v-text-field>
+            <v-text-field
+              type="text"
+              v-model="username"
+              :rules="usernameRules"
+              label="名前"
+              required
+            ></v-text-field>
+          <v-btn type="button" @click="handleSignUp" color="success">登録</v-btn>
+        </v-form>
+       </v-card>
     </v-app>
   </div>
 </template>
@@ -65,6 +64,10 @@ export default {
   },
   methods: {
     handleSignUp: function() {
+      if (this.password !== this.confirmPassword) {
+        alert('パスワードが一致しません。')
+        return false
+      }
       const auth = getAuth()
       createUserWithEmailAndPassword(auth, this.email, this.password)
       .then((result) => {
@@ -89,5 +92,15 @@ export default {
 </script>
 
 <style>
-
+.card-wrapper {
+  width: 60%;
+  margin: auto;
+  padding: 30px;
+}
+.card-form {
+  width: 100%;
+}
+.card-title {
+  font-weight: 700;
+}
 </style>

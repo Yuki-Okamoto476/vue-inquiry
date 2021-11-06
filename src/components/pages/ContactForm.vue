@@ -1,7 +1,5 @@
 <template>
-  <v-app>
-    <v-btn type="button" ></v-btn>
-  </v-app>
+  <div>contactのフォームです</div>
 </template>
 
 <script>
