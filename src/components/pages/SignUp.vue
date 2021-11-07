@@ -33,63 +33,59 @@
           ></v-text-field>
           <v-btn type="button" @click="handleSignUp" color="success">登録</v-btn>
         </v-form>
-       </v-card>
+      </v-card>
     </v-app>
   </div>
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"
-import { db } from "../../plugins/firebase"
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../plugins/firebase';
 export default {
   data() {
     return {
       valid: false,
-      email: "",
-      password: "",
-      confirmPassword: "",
-      username: "",
+      email: '',
+      password: '',
+      confirmPassword: '',
+      username: '',
       emailRules: [
-        v => !!v || "メールアドレスは必須です。",
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
+        (v) => !!v || 'メールアドレスは必須です。',
+        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
-      passwordRules: [
-        v => !!v || "パスワードは必須です。"
-      ],
-      usernameRules: [
-         v => !!v || "名前は必須です。"
-      ]
-    }
+      passwordRules: [(v) => !!v || 'パスワードは必須です。'],
+      usernameRules: [(v) => !!v || '名前は必須です。'],
+    };
   },
   methods: {
-    handleSignUp: function() {
+    handleSignUp: function () {
       if (this.password !== this.confirmPassword) {
-        alert('パスワードが一致しません。')
-        return false
+        alert('パスワードが一致しません。');
+        return false;
       }
-      const auth = getAuth()
+      const auth = getAuth();
       createUserWithEmailAndPassword(auth, this.email, this.password)
-      .then((result) => {
-        const user = result.user
-        if (user) {
-          const uid = user.uid
-          const initialData = {
-            email: this.email,
-            uid: uid,
-            username: this.username
+        .then((result) => {
+          const user = result.user;
+          if (user) {
+            const uid = user.uid;
+            const initialData = {
+              email: this.email,
+              uid: uid,
+              username: this.username,
+            };
+            setDoc(doc(db, 'users', uid), initialData);
           }
-          setDoc(doc(db, "users", uid), initialData)
-        }
-        alert('アカウントが作成されました')
-        this.$router.push('/contactForm')
-      })
-      .catch((error) => {
-        alert(error.message)
-      })
-    }
-  }
-}
+          alert('アカウントが作成されました');
+          this.$router.push('/contactForm');
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    },
+  },
+};
 </script>
 
 <style>
