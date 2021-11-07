@@ -50,61 +50,67 @@
 </template>
 
 <script>
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../plugins/firebase"
-import Header from "../organisms/Header.vue"
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../plugins/firebase';
+import Header from '../organisms/Header.vue';
 export default {
   data() {
     return {
-       valid: false,
-       items: ['A001', 'A002', 'A003', 'A004', 'A005', 'A006', 'A007', 'A008', 'A009', 'A010', 'A011', 'A012', 'A013', 'A014', 'A015'],
-       username: '',
-       email: '',
-       phone: '',
-       selection: '',
-       content: '',
-       usernameRules: [
-         v => !!v || "名前は必須です。"
+      valid: false,
+      items: [
+        'A001',
+        'A002',
+        'A003',
+        'A004',
+        'A005',
+        'A006',
+        'A007',
+        'A008',
+        'A009',
+        'A010',
+        'A011',
+        'A012',
+        'A013',
+        'A014',
+        'A015',
       ],
-       emailRules: [
-        v => !!v || "メールアドレスは必須です。",
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      username: '',
+      email: '',
+      phone: '',
+      selection: '',
+      content: '',
+      usernameRules: [(v) => !!v || '名前は必須です。'],
+      emailRules: [
+        (v) => !!v || 'メールアドレスは必須です。',
+        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
-      phoneRules: [
-         v => !!v || "電話番号は必須です。"
-      ],
-      selectionRules: [
-         v => !!v || "製品種別を選択してください。"
-      ],
-      contentRules: [
-         v => !!v || "問い合わせ内容を入力してください。"
-      ]
-    }
+      phoneRules: [(v) => !!v || '電話番号は必須です。'],
+      selectionRules: [(v) => !!v || '製品種別を選択してください。'],
+      contentRules: [(v) => !!v || '問い合わせ内容を入力してください。'],
+    };
   },
   methods: {
-    handleSubmit: function() {
-      addDoc(collection(db, "inquiries"), {
+    handleSubmit: function () {
+      addDoc(collection(db, 'inquiries'), {
         username: this.username,
         email: this.email,
         phone: this.phone,
         selection: this.selection,
         content: this.content,
-        status: "未対応",
+        status: '未対応',
         created_at: serverTimestamp(),
-        responder: "",
+        responder: '',
         respondTime: serverTimestamp(),
         isAdmin: false,
-        message: ""
-      })
-      alert('送信が完了しました')
-    }
+        message: '',
+      });
+      alert('送信が完了しました');
+    },
   },
   components: {
-    Header
-  }
-}
+    Header,
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
