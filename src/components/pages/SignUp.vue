@@ -4,33 +4,33 @@
       <v-card class="card-wrapper">
         <v-card-title class="card-title">新規登録</v-card-title>
         <v-form v-model="valid" class="card-form">
-            <v-text-field
-              type="email"
-              v-model="email"
-              :rules="emailRules"
-              label="メールアドレス"
-              required
-            ></v-text-field>
-            <v-text-field
-              type="password"
-              v-model="password"
-              :rules="passwordRules"
-              label="パスワード"
-              required
-            ></v-text-field>
-            <v-text-field
-              type="password"
-              v-model="confirmPassword"
-              label="パスワード（確認用）"
-              required
-            ></v-text-field>
-            <v-text-field
-              type="text"
-              v-model="username"
-              :rules="usernameRules"
-              label="名前"
-              required
-            ></v-text-field>
+          <v-text-field
+            type="email"
+            v-model="email"
+            :rules="emailRules"
+            label="メールアドレス"
+            required
+          ></v-text-field>
+          <v-text-field
+            type="password"
+            v-model="password"
+            :rules="passwordRules"
+            label="パスワード"
+            required
+          ></v-text-field>
+          <v-text-field
+            type="password"
+            v-model="confirmPassword"
+            label="パスワード（確認用）"
+            required
+          ></v-text-field>
+          <v-text-field
+            type="text"
+            v-model="username"
+            :rules="usernameRules"
+            label="名前"
+            required
+          ></v-text-field>
           <v-btn type="button" @click="handleSignUp" color="success">登録</v-btn>
         </v-form>
        </v-card>
@@ -82,6 +82,7 @@ export default {
           setDoc(doc(db, "users", uid), initialData)
         }
         alert('アカウントが作成されました')
+        this.$router.push('/contactForm')
       })
       .catch((error) => {
         alert(error.message)
@@ -93,7 +94,7 @@ export default {
 
 <style>
 .card-wrapper {
-  width: 60%;
+  width: 80%;
   margin: auto;
   padding: 30px;
 }

@@ -17,6 +17,7 @@
           required
         ></v-text-field>
         <v-btn type="button" @click="handleSignIn" color="success">ログイン</v-btn>
+        <router-link to="/signUp" class="signUp-link">新規登録はこちら</router-link>
       </v-form>
       </v-card>
     </v-app>
@@ -28,6 +29,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 export default {
   data() {
     return {
+      valid: false,
       email: "",
       password: ""
     }
@@ -49,5 +51,8 @@ export default {
 </script>
 
 <style scoped>
-
+.signUp-link {
+  display: block;
+  float: right;
+}
 </style>
