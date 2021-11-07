@@ -1,7 +1,5 @@
 <template>
   <div>
-    <router-link to="/">SignIn</router-link>
-    <router-link to="/signUp">signUp</router-link>
     <router-view/>
   </div>
 </template>
@@ -16,4 +14,3 @@ export default {
 <style>
 
 </style>
-    SignIn
