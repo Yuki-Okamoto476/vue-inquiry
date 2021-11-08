@@ -9,7 +9,11 @@
           <div class="customer-info">
             <p><span class="subject">メールアドレス</span>：{{ list.email }}</p>
             <p><span class="subject">電話番号</span>：{{ list.phone }}</p>
-            <p><span class="subject">お問い合わせ内容</span>：{{ list.content.length <= 100 ? list.content : list.content.substr(0, 100) + "..." }}</p>
+            <p>
+              <span class="subject">お問い合わせ内容</span>：{{
+                list.content.length <= 100 ? list.content : list.content.substr(0, 100) + '...'
+              }}
+            </p>
             <p><span class="subject">お問い合わせ日時</span>：{{ list.created_at }}</p>
           </div>
         </v-card-text>

@@ -74,6 +74,7 @@ export default {
               email: this.email,
               uid: uid,
               username: this.username,
+              isAdmin: false
             };
             setDoc(doc(db, 'users', uid), initialData);
           }
