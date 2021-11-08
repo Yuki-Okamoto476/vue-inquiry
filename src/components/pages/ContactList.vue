@@ -4,7 +4,7 @@
       <HeaderBar />
       <h1>お問い合わせ一覧</h1>
       <v-card v-for="list in lists" :key="list.id">
-        <v-card-text>
+        <v-card-text v-if="loginUser.isAdmin">
           <p class="text-h4 text--primary">{{ list.username }}様</p>
           <div class="customer-info">
             <p><span class="subject">メールアドレス</span>：{{ list.email }}</p>
@@ -16,6 +16,14 @@
             </p>
             <p><span class="subject">お問い合わせ日時</span>：{{ list.created_at }}</p>
           </div>
+        </v-card-text>
+        <v-card-text v-else>
+          <p>
+            <span class="subject">お問い合わせ内容</span>：{{
+              list.content.length <= 100 ? list.content : list.content.substr(0, 100) + '...'
+            }}
+          </p>
+          <p><span class="subject">お問い合わせ日時</span>：{{ list.created_at }}</p>
         </v-card-text>
         <v-dialog v-model="dialog" :retain-focus="false" width="500">
           <template v-slot:activator="{ on, attrs }">
@@ -90,6 +98,7 @@ export default {
       });
     });
     this.lists = array;
+    this.$store.dispatch('loginCheckAction');
   },
   methods: {
     handleFindDetail: function (listId, listArray) {
@@ -98,6 +107,11 @@ export default {
     },
     handleManageChat: function (chatId) {
       this.$router.push(`/${chatId}`);
+    },
+  },
+  computed: {
+    loginUser: function () {
+      return this.$store.state.user;
     },
   },
   components: {

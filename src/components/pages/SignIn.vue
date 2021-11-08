@@ -34,7 +34,6 @@ export default {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, this.email, this.password)
         .then(() => {
-          alert('ログインできました。');
           this.$router.push('/contactForm');
         })
         .catch(() => {
