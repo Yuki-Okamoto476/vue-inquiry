@@ -3,6 +3,11 @@
     <v-app>
       <HeaderBar />
       <h1>お問い合わせ一覧</h1>
+      <div class="btns">
+        <v-btn @click="handleUnsupported" class="mr-5">未対応</v-btn>
+        <v-btn @click="handleSupporting" class="mr-5">対応中</v-btn>
+        <v-btn @click="handleSupported">対応済み</v-btn>
+      </div>
       <v-card v-for="list in lists" :key="list.id">
         <v-card-text v-if="loginUser.isAdmin">
           <p class="text-h4 text--primary">{{ list.username }}様</p>
@@ -67,8 +72,31 @@
 
 <script>
 import HeaderBar from '../organisms/HeaderBar.vue';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
+
+const getInquiryList = async (status) => {
+  const array = [];
+  const q = query(collection(db, 'inquiries'), where('status', '==', status));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    array.push({
+      id: doc.id,
+      username: doc.data().username,
+      email: doc.data().email,
+      phone: doc.data().phone,
+      selection: doc.data().selection,
+      content: doc.data().content,
+      created_at: doc.data().created_at.toDate().toLocaleString(),
+      status: doc.data().status,
+      responder: doc.data().responder,
+      respondTime: doc.data().respondTime.toDate().toLocaleString(),
+      isAdmin: doc.data().isAdmin,
+      message: doc.data().message,
+    });
+  });
+  return array;
+};
 
 export default {
   data() {
@@ -79,28 +107,19 @@ export default {
     };
   },
   async mounted() {
-    const querySnapshot = await getDocs(collection(db, 'inquiries'));
-    const array = [];
-    querySnapshot.forEach((doc) => {
-      array.push({
-        id: doc.id,
-        username: doc.data().username,
-        email: doc.data().email,
-        phone: doc.data().phone,
-        selection: doc.data().selection,
-        content: doc.data().content,
-        created_at: doc.data().created_at.toDate().toLocaleString(),
-        status: doc.data().status,
-        responder: doc.data().responder,
-        respondTime: doc.data().respondTime.toDate().toLocaleString(),
-        isAdmin: doc.data().isAdmin,
-        message: doc.data().message,
-      });
-    });
-    this.lists = array;
+    this.lists = await getInquiryList('未対応');
     this.$store.dispatch('loginCheckAction');
   },
   methods: {
+    handleUnsupported: async function () {
+      this.lists = await getInquiryList('未対応');
+    },
+    handleSupporting: async function () {
+      this.lists = await getInquiryList('対応中');
+    },
+    handleSupported: async function () {
+      this.lists = await getInquiryList('対応済み');
+    },
     handleFindDetail: function (listId, listArray) {
       const targetList = listArray.find((obj) => obj.id === listId);
       this.targetInquiry = targetList;
@@ -123,6 +142,9 @@ export default {
 <style scoped>
 h1 {
   margin-top: 40px;
+  margin-bottom: 40px;
+}
+.btns {
   margin-bottom: 40px;
 }
 .subject {
