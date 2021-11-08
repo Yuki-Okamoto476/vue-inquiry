@@ -1,11 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import SignIn from '../components/pages/SignIn.vue'
-import SignUp from '../components/pages/SignUp.vue'
-import ContactForm from '../components/pages/ContactForm.vue'
-import ContactList from '../components/pages/ContactList.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import SignIn from '../components/pages/SignIn.vue';
+import SignUp from '../components/pages/SignUp.vue';
+import ContactForm from '../components/pages/ContactForm.vue';
+import ContactList from '../components/pages/ContactList.vue';
+import ContactChat from '../components/pages/ContactChat.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   mode: 'history',
@@ -14,22 +15,27 @@ export default new Router({
     {
       path: '/',
       name: 'signIn',
-      component: SignIn
+      component: SignIn,
     },
     {
       path: '/signUp',
       name: 'signUp',
-      component: SignUp
+      component: SignUp,
     },
     {
       path: '/contactForm',
       name: 'contactForm',
-      component: ContactForm
+      component: ContactForm,
     },
     {
       path: '/contactList',
       name: 'contactList',
-      component: ContactList
-    }
-]})    
-
+      component: ContactList,
+    },
+    {
+      path: '/:id',
+      name: 'contactChat',
+      component: ContactChat,
+    },
+  ],
+});

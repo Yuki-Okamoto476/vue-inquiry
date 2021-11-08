@@ -1,7 +1,7 @@
 <template>
   <div class="contactForm">
     <v-app>
-      <Header />
+      <HeaderBar />
       <v-card class="card-wrapper">
         <v-card-title class="card-title">お問い合わせフォーム</v-card-title>
         <v-form v-model="valid" class="card-form">
@@ -52,7 +52,7 @@
 <script>
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
-import Header from '../organisms/Header.vue';
+import HeaderBar from '../organisms/HeaderBar.vue';
 export default {
   data() {
     return {
@@ -108,7 +108,7 @@ export default {
     },
   },
   components: {
-    Header,
+    HeaderBar,
   },
 };
 </script>
