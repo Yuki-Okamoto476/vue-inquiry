@@ -87,7 +87,11 @@ export default {
       phoneRules: [(v) => !!v || '電話番号は必須です。'],
       selectionRules: [(v) => !!v || '製品種別を選択してください。'],
       contentRules: [(v) => !!v || '問い合わせ内容を入力してください。'],
+      lists: [],
     };
+  },
+  mounted: function () {
+    this.$store.dispatch('loginCheckAction');
   },
   methods: {
     handleSubmit: function () {
@@ -105,6 +109,11 @@ export default {
         message: '',
       });
       alert('送信が完了しました');
+    },
+  },
+  computed: {
+    loginUser: function () {
+      return this.$store.state.user;
     },
   },
   components: {
