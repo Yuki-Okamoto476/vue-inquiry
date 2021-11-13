@@ -1,15 +1,13 @@
 <template>
-  <v-app>
-    <v-btn type="button" ></v-btn>
-  </v-app>
+  <v-btn type="button" color="primary" @click="clickMethod">{{ text }}</v-btn>
 </template>
 
 <script>
 export default {
-
-}
+  name: 'SignButton',
+  props: ['clickMethod', 'text'],
+};
 </script>
 
-<style>
-
+<style scoped>
 </style>

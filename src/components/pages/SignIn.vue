@@ -11,7 +11,7 @@
             label="パスワード"
             required
           ></v-text-field>
-          <v-btn type="button" @click="handleSignIn" color="success">ログイン</v-btn>
+          <SignButton :clickMethod="handleSignIn" text="ログイン"/>
           <router-link to="/signUp" class="signUp-link">新規登録はこちら</router-link>
         </v-form>
       </v-card>
@@ -21,6 +21,7 @@
 
 <script>
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import SignButton from "../atoms/SignButton.vue"
 export default {
   data() {
     return {
@@ -41,10 +42,24 @@ export default {
         });
     },
   },
+  components: {
+    SignButton
+  }
 };
 </script>
 
 <style scoped>
+.card-wrapper {
+  width: 80%;
+  margin: auto;
+  padding: 30px;
+}
+.card-form {
+  width: 100%;
+}
+.card-title {
+  font-weight: 700;
+}
 .signUp-link {
   display: block;
   float: right;
