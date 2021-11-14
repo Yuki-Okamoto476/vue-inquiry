@@ -7,42 +7,42 @@
         <v-form v-model="valid" class="card-form">
           <v-text-field
             type="text"
-            v-model="username"
+            v-model.trim="username"
             :rules="usernameRules"
             label="氏名"
             required
           ></v-text-field>
           <v-text-field
             type="email"
-            v-model="email"
+            v-model.lazy="email"
             :rules="emailRules"
             label="メールアドレス"
             required
           ></v-text-field>
           <v-text-field
             type="tel"
-            v-model="phone"
+            v-model.lazy="phone"
             :rules="phoneRules"
             label="電話番号"
             required
           ></v-text-field>
           <v-select
             :items="items"
-            v-model="selection"
+            v-model.lazy="selection"
             :rules="selectionRules"
             label="製品種別を選択してください"
             required
           ></v-select>
           <v-textarea
             name="input-7-1"
-            v-model="content"
+            v-model.lazy="content"
             :rules="contentRules"
             label="お問い合わせ内容"
             required
             no-resize
             maxlength="2000"
           ></v-textarea>
-          <SignButton :clickMethod="handleSubmit" text="送信"/>
+          <SignButton :clickMethod="handleSubmit" text="送信" />
         </v-form>
       </v-card>
     </v-app>
@@ -53,7 +53,7 @@
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
 import HeaderBar from '../organisms/HeaderBar.vue';
-import SignButton from '../atoms/SignButton.vue'
+import SignButton from '../atoms/SignButton.vue';
 export default {
   data() {
     return {
@@ -119,7 +119,7 @@ export default {
   },
   components: {
     HeaderBar,
-    SignButton
+    SignButton,
   },
 };
 </script>

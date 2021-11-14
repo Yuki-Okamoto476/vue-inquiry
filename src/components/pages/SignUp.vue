@@ -6,14 +6,14 @@
         <v-form v-model="valid" class="card-form">
           <v-text-field
             type="email"
-            v-model="email"
+            v-model.lazy="email"
             :rules="emailRules"
             label="メールアドレス"
             required
           ></v-text-field>
           <v-text-field
             type="password"
-            v-model="password"
+            v-model.lazy="password"
             :rules="passwordRules"
             label="パスワード"
             required
@@ -26,12 +26,12 @@
           ></v-text-field>
           <v-text-field
             type="text"
-            v-model="username"
+            v-model.lazy="username"
             :rules="usernameRules"
             label="名前"
             required
           ></v-text-field>
-          <SignButton :clickMethod="handleSignUp" text="登録"/>
+          <SignButton :clickMethod="handleSignUp" text="登録" />
         </v-form>
       </v-card>
     </v-app>
@@ -88,8 +88,8 @@ export default {
     },
   },
   components: {
-    SignButton
-  }
+    SignButton,
+  },
 };
 </script>
 

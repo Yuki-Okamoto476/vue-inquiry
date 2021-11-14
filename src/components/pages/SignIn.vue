@@ -4,14 +4,19 @@
       <v-card class="card-wrapper">
         <v-card-title class="card-title">ログイン</v-card-title>
         <v-form v-model="valid" class="card-form">
-          <v-text-field type="email" v-model="email" label="メールアドレス" required></v-text-field>
+          <v-text-field
+            type="email"
+            v-model.lazy="email"
+            label="メールアドレス"
+            required
+          ></v-text-field>
           <v-text-field
             type="password"
-            v-model="password"
+            v-model.lazy="password"
             label="パスワード"
             required
           ></v-text-field>
-          <SignButton :clickMethod="handleSignIn" text="ログイン"/>
+          <SignButton :clickMethod="handleSignIn" text="ログイン" />
           <router-link to="/signUp" class="signUp-link">新規登録はこちら</router-link>
         </v-form>
       </v-card>
@@ -21,7 +26,7 @@
 
 <script>
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import SignButton from "../atoms/SignButton.vue"
+import SignButton from '../atoms/SignButton.vue';
 export default {
   data() {
     return {
@@ -43,8 +48,8 @@ export default {
     },
   },
   components: {
-    SignButton
-  }
+    SignButton,
+  },
 };
 </script>
 
