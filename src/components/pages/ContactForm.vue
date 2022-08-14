@@ -42,7 +42,7 @@
             no-resize
             maxlength="2000"
           ></v-textarea>
-          <SignButton :clickMethod="handleSubmit" text="送信" />
+          <v-btn type="button" color="primary" @click="handleSubmit">送信</v-btn>
         </v-form>
       </v-card>
     </v-app>
@@ -53,7 +53,6 @@
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
 import HeaderBar from '../organisms/HeaderBar.vue';
-import SignButton from '../atoms/SignButton.vue';
 export default {
   data() {
     return {
@@ -119,7 +118,6 @@ export default {
   },
   components: {
     HeaderBar,
-    SignButton,
   },
 };
 </script>

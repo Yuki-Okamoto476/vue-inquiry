@@ -1,4 +1,4 @@
-# vue-chat
+# vue-inquiry
 
 ## Project setup
 ```

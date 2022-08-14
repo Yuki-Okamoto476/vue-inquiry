@@ -3,13 +3,14 @@
     <h1>オシリス</h1>
     <router-link to="/contactForm" class="form-link">お問い合わせフォーム</router-link>
     <router-link to="/contactList">お問い合わせ一覧</router-link>
-    <SignButton :clickMethod="handleSignOut" text="ログアウト" class="header-btn" />
+    <v-btn type="button" color="primary" @click="handleSignOut" class="header-btn"
+      >ログアウト</v-btn
+    >
   </header>
 </template>
 
 <script>
 import { getAuth, signOut } from 'firebase/auth';
-import SignButton from '../atoms/SignButton.vue';
 export default {
   name: 'HeaderBar',
   methods: {
@@ -23,9 +24,6 @@ export default {
           alert('ログアウトに失敗しました。');
         });
     },
-  },
-  components: {
-    SignButton,
   },
 };
 </script>

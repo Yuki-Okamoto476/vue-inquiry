@@ -31,7 +31,7 @@
             label="名前"
             required
           ></v-text-field>
-          <SignButton :clickMethod="handleSignUp" text="登録" />
+          <v-btn type="button" color="primary" @click="handleSignUp">登録</v-btn>
         </v-form>
       </v-card>
     </v-app>
@@ -42,7 +42,6 @@
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
-import SignButton from '../atoms/SignButton.vue';
 export default {
   data() {
     return {
@@ -86,9 +85,6 @@ export default {
           alert(error.message);
         });
     },
-  },
-  components: {
-    SignButton,
   },
 };
 </script>

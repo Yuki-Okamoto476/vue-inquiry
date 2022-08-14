@@ -5,10 +5,11 @@
       "baseUrl": "./",
       "paths": {
         "@/*": ["components/*"]
-      }
+      },
+      "jsx": "preserve"
     },
     "include": [
       "src/**/*.vue",
       "src/**/*.js"
-    ]
+    ],
   }
