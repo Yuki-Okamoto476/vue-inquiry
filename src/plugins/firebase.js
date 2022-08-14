@@ -6,8 +6,7 @@ import { getFirestore } from 'firebase/firestore';
 Vue.use(firestorePlugin)
 
 const firebaseApp = firebase.initializeApp({
-  // ここにfirebaseのapi情報をコピペします。
-  apiKey: "AIzaSyCWFrSPI-sNfRYa9d8sLd6rYfHY1SN3h-I",
+  apiKey: process.env.VUE_APP_API_KEY,
   authDomain: "vue-chat-35a02.firebaseapp.com",
   projectId: "vue-chat-35a02",
   storageBucket: "vue-chat-35a02.appspot.com",

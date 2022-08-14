@@ -157,8 +157,8 @@ export default {
       if (this.loginUser.username === responder || responder === '') {
         this.$router.push(`/${chat_id}`);
         updateDoc(doc(db, 'inquiries', chat_id), {
-          status: '対応中'
-        })
+          status: '対応中',
+        });
       } else {
         alert('ほかの管理者が対応しています。');
       }
