@@ -4,19 +4,17 @@
       <HeaderBar />
       <div class="ma-5">
         <h1 class="mb-10">お問い合わせ一覧</h1>
-        <div>
-          <v-btn
-            v-for="(item, index) in tabs"
-            :key="index"
-            class="mr-5 mb-10"
-            :class="category === item.value ? 'blue' : 'blue lighten-5'"
-            @click="tabClickHandler(item.value)"
-            >{{ item.value }}</v-btn
-          >
-        </div>
+        <v-btn
+          v-for="(item, index) in tabs"
+          :key="index"
+          class="mr-5 mb-10"
+          :class="category === item.value ? 'blue' : 'blue lighten-5'"
+          @click="tabClickHandler(item.value)"
+          >{{ item.value }}</v-btn
+        >
         <div v-show="loading">Loading...</div>
         <div v-show="!loading" class="contact-list__cards">
-          <v-card v-for="inquiryItem in inquiryList" :key="inquiryItem.id">
+          <v-card v-for="inquiryItem in filterInquiryItems" :key="inquiryItem.id">
             <v-card-text v-if="loginUser.isAdmin">
               <p class="text-h4 text--primary">{{ inquiryItem.username }}様</p>
               <div class="customer-info">
@@ -63,7 +61,7 @@
                   dark
                   v-bind="attrs"
                   v-on="on"
-                  @click="handleFindDetail(inquiryItem.id, inquiryList)"
+                  @click="findDetailInformation(inquiryItem.id, inquiryList)"
                   class="contact-list__cards-button"
                 >
                   詳細を見る
@@ -132,9 +130,6 @@ export default {
       dialog: false,
       inquiryList: [],
       targetInquiry: '',
-      unsupported: true,
-      supporting: false,
-      supported: false,
       category: '',
       loading: true,
     };
@@ -150,21 +145,27 @@ export default {
         { category: 'supported', value: CATEGORY.SUPPORTED },
       ];
     },
+    filterInquiryItems() {
+      return this.inquiryList.filter((item) => item.status === this.category);
+    },
+    hasCategory() {
+      return this.inquiryList.some((item) => item.status === this.category);
+    },
   },
-  async mounted() {
-    this.category = CATEGORY.UNSUPPORTED;
-    this.inquiryList = await this.getInquiryList(this.category);
+  mounted() {
     this.$store.dispatch('loginCheckAction');
+    this.category = CATEGORY.UNSUPPORTED;
+    this.getInquiryList(this.category);
   },
   methods: {
-    async tabClickHandler(value) {
-      this.loading = true;
-      this.inquiryList = await this.getInquiryList(value);
+    tabClickHandler(value) {
       this.category = value;
+      if (this.hasCategory) return;
+      this.loading = true;
+      this.getInquiryList(value);
     },
-    handleFindDetail(list_id, listArray) {
-      const targetList = listArray.find((obj) => obj.id === list_id);
-      this.targetInquiry = targetList;
+    findDetailInformation(list_id, listArray) {
+      this.targetInquiry = listArray.find((obj) => obj.id === list_id);
     },
     handleManageChat(chat_id, responder) {
       if (this.loginUser.username === responder || responder === '') {
@@ -177,12 +178,11 @@ export default {
       }
     },
     async getInquiryList(status) {
-      const array = [];
       const q = query(collection(db, 'inquiries'), where('status', '==', status));
       try {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          array.push({
+          this.inquiryList.push({
             id: doc.id,
             username: doc.data().username,
             email: doc.data().email,
@@ -198,7 +198,6 @@ export default {
           });
         });
         this.loading = false;
-        return array;
       } catch {
         this.loading = false;
         alert('データの取得に失敗しました。ブラウザの再読み込みをしてください。');
@@ -212,9 +211,6 @@ export default {
 </script>
 
 <style scoped>
-.contact-list__category-buttons {
-  display: flex;
-}
 .contact-list__cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -223,7 +219,7 @@ export default {
 }
 
 .contact-list__cards-subject {
-  font-weight: 700;
+  font-weight: bold;
 }
 .contact-list__cards-button {
   margin-bottom: 30px;
