@@ -75,6 +75,11 @@ export default {
       customerBg: 'blue lighten-3',
     };
   },
+  computed: {
+    loginUser: function () {
+      return this.$store.state.user;
+    },
+  },
   mounted: function () {
     this.$store.dispatch('loginCheckAction');
     const unSubInquiry = onSnapshot(doc(db, 'inquiries', this.chat_id), (doc) => {
@@ -101,7 +106,7 @@ export default {
     };
   },
   methods: {
-    handlePushMessage: function () {
+    handlePushMessage() {
       addDoc(collection(db, 'chats', this.chat_id, 'messages'), {
         uid: this.loginUser.uid,
         isAdmin: this.loginUser.isAdmin,
@@ -117,11 +122,6 @@ export default {
         status: '対応済み',
       });
       this.messageText = '';
-    },
-  },
-  computed: {
-    loginUser: function () {
-      return this.$store.state.user;
     },
   },
   components: {

@@ -26,6 +26,7 @@
 
 <script>
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+
 export default {
   data() {
     return {
@@ -35,7 +36,7 @@ export default {
     };
   },
   methods: {
-    handleSignIn: function () {
+    handleSignIn() {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, this.email, this.password)
         .then(() => {

@@ -88,17 +88,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card-wrapper {
-  width: 80%;
-  margin: auto;
-  padding: 30px;
-}
-.card-form {
-  width: 100%;
-}
-.card-title {
-  font-weight: 700;
-}
-</style>

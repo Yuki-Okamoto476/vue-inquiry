@@ -53,6 +53,7 @@
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
 import HeaderBar from '../organisms/HeaderBar.vue';
+
 export default {
   data() {
     return {
@@ -90,11 +91,16 @@ export default {
       lists: [],
     };
   },
-  mounted: function () {
+  computed: {
+    loginUser: function () {
+      return this.$store.state.user;
+    },
+  },
+  mounted() {
     this.$store.dispatch('loginCheckAction');
   },
   methods: {
-    handleSubmit: function () {
+    handleSubmit() {
       addDoc(collection(db, 'inquiries'), {
         username: this.username,
         email: this.email,
@@ -111,27 +117,8 @@ export default {
       alert('送信が完了しました');
     },
   },
-  computed: {
-    loginUser: function () {
-      return this.$store.state.user;
-    },
-  },
   components: {
     HeaderBar,
   },
 };
 </script>
-
-<style scoped>
-.card-wrapper {
-  width: 80%;
-  margin: auto;
-  padding: 30px;
-}
-.card-form {
-  width: 100%;
-}
-.card-title {
-  font-weight: 700;
-}
-</style>
