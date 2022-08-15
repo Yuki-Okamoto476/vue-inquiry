@@ -14,7 +14,7 @@
         >
         <div v-show="loading">Loading...</div>
         <div v-show="!loading" class="contact-list__cards">
-          <v-card v-for="item in filterInquiryItems" :key="item.id">
+          <v-card v-for="item in filterInquiryList" :key="item.id">
             <v-card-text v-if="loginUser.isAdmin">
               <p class="text-h4 text--primary">{{ item.username }}様</p>
               <div class="customer-info">
@@ -91,7 +91,7 @@
                     v-if="loginUser.isAdmin"
                     color="primary"
                     text
-                    @click="handleManageChat(targetInquiry.id, targetInquiry.responder)"
+                    @click="startChat(targetInquiry.id, targetInquiry.responder)"
                   >
                     対応を開始する
                   </v-btn>
@@ -137,7 +137,7 @@ export default {
         { category: 'supported', value: CATEGORY.SUPPORTED },
       ];
     },
-    filterInquiryItems() {
+    filterInquiryList() {
       return this.inquiryList.filter((item) => item.status === this.category);
     },
     hasCategory() {
@@ -156,10 +156,10 @@ export default {
       this.loading = true;
       this.getInquiryList(value);
     },
-    findDetailInformation(list_id, listArray) {
-      this.targetInquiry = listArray.find((obj) => obj.id === list_id);
+    findDetailInformation(id, list) {
+      this.targetInquiry = list.find((item) => item.id === id);
     },
-    handleManageChat(chat_id, responder) {
+    startChat(chat_id, responder) {
       if (this.loginUser.username === responder || responder === '') {
         this.$router.push(`/${chat_id}`);
         updateDoc(doc(db, 'inquiries', chat_id), {

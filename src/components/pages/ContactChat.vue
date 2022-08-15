@@ -9,7 +9,7 @@
             <MessageBox
               :icon="require('@/assets/customer.svg')"
               :content="item.content"
-              :bg="customerBg"
+              :isAdmin="false"
             />
           </div>
           <div v-for="item in messageList" :key="item.id">
@@ -17,14 +17,14 @@
               v-if="item.isAdmin"
               :icon="require('@/assets/manager.svg')"
               :content="item.message"
-              :bg="managerBg"
+              :isAdmin="true"
               class="ma-5"
             />
             <MessageBox
               v-else
               :icon="require('@/assets/customer.svg')"
               :content="item.message"
-              :bg="customerBg"
+              :isAdmin="false"
               class="ma-5"
             />
           </div>
@@ -40,7 +40,7 @@
             src="@/assets/submit2.svg"
             alt="送信"
             width="40"
-            class="mr-5 submitIcon"
+            class="mr-5 contact-chat__submit-icon"
             @click="sendMessage"
           />
         </div>
@@ -71,8 +71,6 @@ export default {
       inquiryList: [],
       messageText: '',
       messageList: [],
-      managerBg: 'blue',
-      customerBg: 'blue lighten-3',
     };
   },
   computed: {
@@ -144,7 +142,7 @@ export default {
   height: 100vh;
   grid-template-rows: 1fr auto;
 }
-.submitIcon:hover {
+.contact-chat__submit-icon:hover {
   opacity: 0.7;
   cursor: pointer;
 }

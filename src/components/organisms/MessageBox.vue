@@ -3,7 +3,9 @@
     <v-app>
       <div class="d-flex align-center mt-3">
         <v-avatar><img :src="icon" /></v-avatar>
-        <p class="ma-3 pa-5 rounded-lg" :class="bg">{{ content }}</p>
+        <p class="ma-3 pa-5 rounded-lg" :class="isAdmin ? 'blue' : 'blue lighten-3'">
+          {{ content }}
+        </p>
       </div>
     </v-app>
   </div>
@@ -12,7 +14,19 @@
 <script>
 export default {
   name: 'MessageBox',
-  props: ['icon', 'content', 'bg'],
+  props: {
+    icon: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+    },
+  },
 };
 </script>
 
