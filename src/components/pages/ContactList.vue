@@ -4,21 +4,14 @@
       <HeaderBar />
       <div class="ma-5">
         <h1 class="mb-10">お問い合わせ一覧</h1>
-        <div class="mb-10">
+        <div>
           <v-btn
-            @click="handleUnsupported"
-            class="mr-5"
-            :class="unsupported ? 'blue' : 'blue lighten-5'"
-            >未対応</v-btn
-          >
-          <v-btn
-            @click="handleSupporting"
-            class="mr-5"
-            :class="supporting ? 'blue' : 'blue lighten-5'"
-            >対応中</v-btn
-          >
-          <v-btn @click="handleSupported" :class="supported ? 'blue' : 'blue lighten-5'"
-            >対応済み</v-btn
+            v-for="(item, index) in tabs"
+            :key="index"
+            class="mr-5 mb-10"
+            :class="category === item.value ? 'blue' : 'blue lighten-5'"
+            @click="tabClickHandler(item.value)"
+            >{{ item.value }}</v-btn
           >
         </div>
         <div v-show="loading">Loading...</div>
@@ -127,6 +120,12 @@ import HeaderBar from '../organisms/HeaderBar.vue';
 import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
 
+const CATEGORY = {
+  UNSUPPORTED: '未対応',
+  SUPPORTING: '対応中',
+  SUPPORTED: '対応済み',
+};
+
 export default {
   data() {
     return {
@@ -136,39 +135,32 @@ export default {
       unsupported: true,
       supporting: false,
       supported: false,
+      category: '',
       loading: true,
     };
   },
   computed: {
-    loginUser: function () {
+    loginUser() {
       return this.$store.state.user;
+    },
+    tabs() {
+      return [
+        { category: 'unsupported', value: CATEGORY.UNSUPPORTED },
+        { category: 'supporting', value: CATEGORY.SUPPORTING },
+        { category: 'supported', value: CATEGORY.SUPPORTED },
+      ];
     },
   },
   async mounted() {
-    this.inquiryList = await this.getInquiryList('未対応');
+    this.category = CATEGORY.UNSUPPORTED;
+    this.inquiryList = await this.getInquiryList(this.category);
     this.$store.dispatch('loginCheckAction');
   },
   methods: {
-    async handleUnsupported() {
-      this.loading = true
-      this.inquiryList = await this.getInquiryList('未対応');
-      this.unsupported = true;
-      this.supporting = false;
-      this.supported = false;
-    },
-    async handleSupporting() {
-      this.loading = true
-      this.inquiryList = await this.getInquiryList('対応中');
-      this.unsupported = false;
-      this.supporting = true;
-      this.supported = false;
-    },
-    async handleSupported() {
-      this.loading = true
-      this.inquiryList = await this.getInquiryList('対応済み');
-      this.unsupported = false;
-      this.supporting = false;
-      this.supported = true;
+    async tabClickHandler(value) {
+      this.loading = true;
+      this.inquiryList = await this.getInquiryList(value);
+      this.category = value;
     },
     handleFindDetail(list_id, listArray) {
       const targetList = listArray.find((obj) => obj.id === list_id);
@@ -205,9 +197,10 @@ export default {
             message: doc.data().message,
           });
         });
-        this.loading = false
+        this.loading = false;
         return array;
       } catch {
+        this.loading = false;
         alert('データの取得に失敗しました。ブラウザの再読み込みをしてください。');
       }
     },
@@ -219,6 +212,9 @@ export default {
 </script>
 
 <style scoped>
+.contact-list__category-buttons {
+  display: flex;
+}
 .contact-list__cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
