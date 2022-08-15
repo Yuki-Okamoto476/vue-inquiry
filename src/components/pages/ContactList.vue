@@ -14,28 +14,22 @@
         >
         <div v-show="loading">Loading...</div>
         <div v-show="!loading" class="contact-list__cards">
-          <v-card v-for="inquiryItem in filterInquiryItems" :key="inquiryItem.id">
+          <v-card v-for="item in filterInquiryItems" :key="item.id">
             <v-card-text v-if="loginUser.isAdmin">
-              <p class="text-h4 text--primary">{{ inquiryItem.username }}様</p>
+              <p class="text-h4 text--primary">{{ item.username }}様</p>
               <div class="customer-info">
                 <p>
-                  <span class="contact-list__cards-subject">メールアドレス</span>：{{
-                    inquiryItem.email
-                  }}
+                  <span class="contact-list__cards-subject">メールアドレス</span>：{{ item.email }}
                 </p>
-                <p>
-                  <span class="contact-list__cards-subject">電話番号</span>：{{ inquiryItem.phone }}
-                </p>
+                <p><span class="contact-list__cards-subject">電話番号</span>：{{ item.phone }}</p>
                 <p>
                   <span class="contact-list__cards-subject">お問い合わせ内容</span>：{{
-                    inquiryItem.content.length <= 100
-                      ? inquiryItem.content
-                      : inquiryItem.content.substr(0, 100) + '...'
+                    item.content.length <= 100 ? item.content : item.content.substr(0, 100) + '...'
                   }}
                 </p>
                 <p>
                   <span class="contact-list__cards-subject">お問い合わせ日時</span>：{{
-                    inquiryItem.created_at
+                    item.created_at
                   }}
                 </p>
               </div>
@@ -43,14 +37,12 @@
             <v-card-text v-else>
               <p>
                 <span class="contact-list__cards-subject">お問い合わせ内容</span>：{{
-                  inquiryItem.content.length <= 100
-                    ? inquiryItem.content
-                    : inquiryItem.content.substr(0, 100) + '...'
+                  item.content.length <= 100 ? item.content : item.content.substr(0, 100) + '...'
                 }}
               </p>
               <p>
                 <span class="contact-list__cards-subject">お問い合わせ日時</span>：{{
-                  inquiryItem.created_at
+                  item.created_at
                 }}
               </p>
             </v-card-text>
@@ -61,7 +53,7 @@
                   dark
                   v-bind="attrs"
                   v-on="on"
-                  @click="findDetailInformation(inquiryItem.id, inquiryList)"
+                  @click="findDetailInformation(item.id, inquiryList)"
                   class="contact-list__cards-button"
                 >
                   詳細を見る

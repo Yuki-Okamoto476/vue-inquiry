@@ -59,7 +59,7 @@ export default {
     };
   },
   methods: {
-    handleSignUp: function () {
+    handleSignUp() {
       if (this.password !== this.confirmPassword) {
         alert('パスワードが一致しません。');
         return false;

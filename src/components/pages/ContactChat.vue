@@ -1,29 +1,29 @@
 <template>
-  <div class="contactChat">
+  <div class="contact-chat">
     <v-app>
       <HeaderBar />
-      <div class="wrapper">
-        <div class="messageContainer">
-          <div v-for="list in inquiryLists" :key="list.id" class="ma-5">
-            <h1 v-if="loginUser.isAdmin">{{ list.username }}様</h1>
+      <div class="contact-chat__contents-wrapper">
+        <div>
+          <div v-for="item in inquiryList" :key="item.id" class="ma-5">
+            <h1 v-if="loginUser.isAdmin">{{ item.username }}様</h1>
             <MessageBox
               :icon="require('@/assets/customer.svg')"
-              :content="list.content"
+              :content="item.content"
               :bg="customerBg"
             />
           </div>
-          <div v-for="data in messageLists" :key="data.id">
+          <div v-for="item in messageList" :key="item.id">
             <MessageBox
-              v-if="data.isAdmin"
+              v-if="item.isAdmin"
               :icon="require('@/assets/manager.svg')"
-              :content="data.message"
+              :content="item.message"
               :bg="managerBg"
               class="ma-5"
             />
             <MessageBox
               v-else
               :icon="require('@/assets/customer.svg')"
-              :content="data.message"
+              :content="item.message"
               :bg="customerBg"
               class="ma-5"
             />
@@ -41,7 +41,7 @@
             alt="送信"
             width="40"
             class="mr-5 submitIcon"
-            @click="handlePushMessage"
+            @click="sendMessage"
           />
         </div>
       </div>
@@ -67,54 +67,58 @@ import { db } from '../../plugins/firebase';
 export default {
   data() {
     return {
-      chat_id: this.$route.params['id'],
-      inquiryLists: [],
+      chatId: this.$route.params['id'],
+      inquiryList: [],
       messageText: '',
-      messageLists: [],
+      messageList: [],
       managerBg: 'blue',
       customerBg: 'blue lighten-3',
     };
   },
   computed: {
-    loginUser: function () {
+    loginUser() {
       return this.$store.state.user;
     },
   },
-  mounted: function () {
+  mounted() {
     this.$store.dispatch('loginCheckAction');
-    const unSubInquiry = onSnapshot(doc(db, 'inquiries', this.chat_id), (doc) => {
-      const array = [];
-      array.push(doc.data());
-      this.inquiryLists = array;
-    });
-    const msgRef = collection(db, 'chats', this.chat_id, 'messages');
-    const q = query(msgRef, orderBy('created_at', 'asc'));
-    const unSubMessage = onSnapshot(q, (querySnapshot) => {
-      const array = [];
-      querySnapshot.forEach((doc) => {
-        array.push({
-          id: doc.id,
-          isAdmin: doc.data().isAdmin,
-          message: doc.data().message,
-        });
-      });
-      this.messageLists = array;
-    });
-    return () => {
-      unSubInquiry();
-      unSubMessage();
-    };
+    this.getInquiry();
+    this.getMessage();
   },
   methods: {
-    handlePushMessage() {
-      addDoc(collection(db, 'chats', this.chat_id, 'messages'), {
+    getInquiry() {
+      const unSubInquiry = onSnapshot(doc(db, 'inquiries', this.chatId), (doc) => {
+        const data_array = [];
+        data_array.push(doc.data());
+        this.inquiryList = data_array;
+      });
+      return () => unSubInquiry();
+    },
+    getMessage() {
+      const msgRef = collection(db, 'chats', this.chatId, 'messages');
+      const q = query(msgRef, orderBy('created_at', 'asc'));
+      const unSubMessage = onSnapshot(q, (querySnapshot) => {
+        const data_array = [];
+        querySnapshot.forEach((doc) => {
+          data_array.push({
+            id: doc.id,
+            isAdmin: doc.data().isAdmin,
+            message: doc.data().message,
+          });
+        });
+        this.messageList = data_array;
+      });
+      return () => unSubMessage();
+    },
+    sendMessage() {
+      addDoc(collection(db, 'chats', this.chatId, 'messages'), {
         uid: this.loginUser.uid,
         isAdmin: this.loginUser.isAdmin,
         username: this.loginUser.username,
         message: this.messageText,
         created_at: serverTimestamp(),
       });
-      updateDoc(doc(db, 'inquiries', this.chat_id), {
+      updateDoc(doc(db, 'inquiries', this.chatId), {
         responder: this.loginUser.username,
         respondTime: serverTimestamp(),
         isAdmin: this.loginUser.isAdmin,
@@ -135,7 +139,7 @@ export default {
 ::v-deep .v-application--wrap {
   min-height: fit-content;
 }
-.wrapper {
+.contact-chat__contents-wrapper {
   display: grid;
   height: 100vh;
   grid-template-rows: 1fr auto;
