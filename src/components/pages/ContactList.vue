@@ -8,7 +8,7 @@
           <v-btn
             @click="handleUnsupported"
             class="mr-5"
-            :class="unsupport ? 'blue' : 'blue lighten-5'"
+            :class="unsupported ? 'blue' : 'blue lighten-5'"
             >未対応</v-btn
           >
           <v-btn
@@ -21,28 +21,47 @@
             >対応済み</v-btn
           >
         </div>
-        <div class="contact-list__cards">
-          <v-card v-for="list in lists" :key="list.id">
+        <div v-show="loading">Loading...</div>
+        <div v-show="!loading" class="contact-list__cards">
+          <v-card v-for="inquiryItem in inquiryList" :key="inquiryItem.id">
             <v-card-text v-if="loginUser.isAdmin">
-              <p class="text-h4 text--primary">{{ list.username }}様</p>
+              <p class="text-h4 text--primary">{{ inquiryItem.username }}様</p>
               <div class="customer-info">
-                <p><span class="contact-list__cards-subject">メールアドレス</span>：{{ list.email }}</p>
-                <p><span class="contact-list__cards-subject">電話番号</span>：{{ list.phone }}</p>
                 <p>
-                  <span class="contact-list__cards-subject">お問い合わせ内容</span>：{{
-                    list.content.length <= 100 ? list.content : list.content.substr(0, 100) + '...'
+                  <span class="contact-list__cards-subject">メールアドレス</span>：{{
+                    inquiryItem.email
                   }}
                 </p>
-                <p><span class="contact-list__cards-subject">お問い合わせ日時</span>：{{ list.created_at }}</p>
+                <p>
+                  <span class="contact-list__cards-subject">電話番号</span>：{{ inquiryItem.phone }}
+                </p>
+                <p>
+                  <span class="contact-list__cards-subject">お問い合わせ内容</span>：{{
+                    inquiryItem.content.length <= 100
+                      ? inquiryItem.content
+                      : inquiryItem.content.substr(0, 100) + '...'
+                  }}
+                </p>
+                <p>
+                  <span class="contact-list__cards-subject">お問い合わせ日時</span>：{{
+                    inquiryItem.created_at
+                  }}
+                </p>
               </div>
             </v-card-text>
             <v-card-text v-else>
               <p>
                 <span class="contact-list__cards-subject">お問い合わせ内容</span>：{{
-                  list.content.length <= 100 ? list.content : list.content.substr(0, 100) + '...'
+                  inquiryItem.content.length <= 100
+                    ? inquiryItem.content
+                    : inquiryItem.content.substr(0, 100) + '...'
                 }}
               </p>
-              <p><span class="contact-list__cards-subject">お問い合わせ日時</span>：{{ list.created_at }}</p>
+              <p>
+                <span class="contact-list__cards-subject">お問い合わせ日時</span>：{{
+                  inquiryItem.created_at
+                }}
+              </p>
             </v-card-text>
             <v-dialog v-model="dialog" :retain-focus="false" width="500">
               <template v-slot:activator="{ on, attrs }">
@@ -51,24 +70,40 @@
                   dark
                   v-bind="attrs"
                   v-on="on"
-                  @click="handleFindDetail(list.id, lists)"
+                  @click="handleFindDetail(inquiryItem.id, inquiryList)"
                   class="contact-list__cards-button"
                 >
                   詳細を見る
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title class="text-h5 grey lighten-2"> 対応情報 </v-card-title>
+                <v-card-title class="text-h5 grey lighten-2">対応情報</v-card-title>
                 <v-card-text class="contact-list__cards-information">
-                  <p><span class="contact-list__cards-subject">対応状況</span>：{{ targetInquiry.status }}</p>
-                  <p><span class="contact-list__cards-subject">対応者</span>：{{ targetInquiry.responder }}</p>
-                  <p><span class="contact-list__cards-subject">対応日時</span>：{{ targetInquiry.respondTime }}</p>
-                  <p><span class="contact-list__cards-subject">メッセージ</span>：{{ targetInquiry.message }}</p>
+                  <p>
+                    <span class="contact-list__cards-subject">対応状況</span>：{{
+                      targetInquiry.status
+                    }}
+                  </p>
+                  <p>
+                    <span class="contact-list__cards-subject">対応者</span>：{{
+                      targetInquiry.responder
+                    }}
+                  </p>
+                  <p>
+                    <span class="contact-list__cards-subject">対応日時</span>：{{
+                      targetInquiry.respondTime
+                    }}
+                  </p>
+                  <p>
+                    <span class="contact-list__cards-subject">メッセージ</span>：{{
+                      targetInquiry.message
+                    }}
+                  </p>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="dialog = false"> 閉じる </v-btn>
+                  <v-btn color="primary" text @click="dialog = false">閉じる</v-btn>
                   <v-btn
                     v-if="loginUser.isAdmin"
                     color="primary"
@@ -96,11 +131,12 @@ export default {
   data() {
     return {
       dialog: false,
-      lists: [],
+      inquiryList: [],
       targetInquiry: '',
-      unsupport: true,
+      unsupported: true,
       supporting: false,
       supported: false,
+      loading: true,
     };
   },
   computed: {
@@ -109,25 +145,28 @@ export default {
     },
   },
   async mounted() {
-    this.lists = await this.getInquiryLists('未対応');
+    this.inquiryList = await this.getInquiryList('未対応');
     this.$store.dispatch('loginCheckAction');
   },
   methods: {
     async handleUnsupported() {
-      this.lists = await this.getInquiryLists('未対応');
-      this.unsupport = true;
+      this.loading = true
+      this.inquiryList = await this.getInquiryList('未対応');
+      this.unsupported = true;
       this.supporting = false;
       this.supported = false;
     },
     async handleSupporting() {
-      this.lists = await this.getInquiryLists('対応中');
-      this.unsupport = false;
+      this.loading = true
+      this.inquiryList = await this.getInquiryList('対応中');
+      this.unsupported = false;
       this.supporting = true;
       this.supported = false;
     },
     async handleSupported() {
-      this.lists = await this.getInquiryLists('対応済み');
-      this.unsupport = false;
+      this.loading = true
+      this.inquiryList = await this.getInquiryList('対応済み');
+      this.unsupported = false;
       this.supporting = false;
       this.supported = true;
     },
@@ -145,27 +184,32 @@ export default {
         alert('ほかの管理者が対応しています。');
       }
     },
-    async getInquiryLists(status) {
+    async getInquiryList(status) {
       const array = [];
       const q = query(collection(db, 'inquiries'), where('status', '==', status));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        array.push({
-          id: doc.id,
-          username: doc.data().username,
-          email: doc.data().email,
-          phone: doc.data().phone,
-          selection: doc.data().selection,
-          content: doc.data().content,
-          created_at: doc.data().created_at.toDate().toLocaleString(),
-          status: doc.data().status,
-          responder: doc.data().responder,
-          respondTime: doc.data().respondTime.toDate().toLocaleString(),
-          isAdmin: doc.data().isAdmin,
-          message: doc.data().message,
+      try {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          array.push({
+            id: doc.id,
+            username: doc.data().username,
+            email: doc.data().email,
+            phone: doc.data().phone,
+            selection: doc.data().selection,
+            content: doc.data().content,
+            created_at: doc.data().created_at.toDate().toLocaleString(),
+            status: doc.data().status,
+            responder: doc.data().responder,
+            respondTime: doc.data().respondTime.toDate().toLocaleString(),
+            isAdmin: doc.data().isAdmin,
+            message: doc.data().message,
+          });
         });
-      });
-      return array;
+        this.loading = false
+        return array;
+      } catch {
+        alert('データの取得に失敗しました。ブラウザの再読み込みをしてください。');
+      }
     },
   },
   components: {
