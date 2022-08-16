@@ -79,7 +79,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('loginCheckAction');
+    this.$store.dispatch('Action');
     this.getInquiry();
     this.getMessage();
   },

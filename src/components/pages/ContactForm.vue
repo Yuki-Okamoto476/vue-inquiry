@@ -97,7 +97,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('loginCheckAction');
+    this.$store.dispatch('GET_LOGIN_STATE');
   },
   methods: {
     handleSubmit() {

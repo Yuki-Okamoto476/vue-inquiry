@@ -145,7 +145,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('loginCheckAction');
+    this.$store.dispatch('GET_LOGIN_STATE');
     this.category = CATEGORY.UNSUPPORTED;
     this.getInquiryList(this.category);
   },
