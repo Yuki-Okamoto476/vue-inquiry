@@ -42,7 +42,9 @@
             no-resize
             maxlength="2000"
           ></v-textarea>
-          <v-btn type="button" color="primary" @click="handleSubmit">送信</v-btn>
+          <v-btn type="button" color="primary" @click="handleSubmit" :disabled="buttonDisabled"
+            >送信</v-btn
+          >
         </v-form>
       </v-card>
     </v-app>
@@ -83,21 +85,18 @@ export default {
       usernameRules: [(v) => !!v || '名前は必須です。'],
       emailRules: [
         (v) => !!v || 'メールアドレスは必須です。',
-        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
+        (v) => /.+@.+/.test(v) || '有効な形式でメールアドレスを入力してください。',
       ],
       phoneRules: [(v) => !!v || '電話番号は必須です。'],
       selectionRules: [(v) => !!v || '製品種別を選択してください。'],
       contentRules: [(v) => !!v || '問い合わせ内容を入力してください。'],
-      lists: [],
     };
   },
   computed: {
-    loginUser: function () {
-      return this.$store.state.user;
+    buttonDisabled() {
+      const formList = [this.username, this.email, this.phone, this.selection, this.content];
+      return formList.some((item) => !item);
     },
-  },
-  mounted() {
-    this.$store.dispatch('GET_LOGIN_STATE');
   },
   methods: {
     handleSubmit() {
