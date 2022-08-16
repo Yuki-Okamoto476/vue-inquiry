@@ -1,5 +1,5 @@
 <template>
-  <div class="signUp">
+  <div class="sign-up">
     <v-app>
       <v-card class="card-wrapper">
         <v-card-title class="card-title">新規登録</v-card-title>

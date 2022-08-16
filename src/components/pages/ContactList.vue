@@ -1,7 +1,7 @@
 <template>
   <div class="contact-list">
     <v-app>
-      <HeaderBar />
+      <Header />
       <div class="ma-5">
         <h1 class="mb-10">お問い合わせ一覧</h1>
         <v-btn
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import HeaderBar from '../organisms/HeaderBar.vue';
+import Header from '../organisms/Header.vue';
 import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../../plugins/firebase';
 
@@ -197,7 +197,7 @@ export default {
     },
   },
   components: {
-    HeaderBar,
+    Header,
   },
 };
 </script>

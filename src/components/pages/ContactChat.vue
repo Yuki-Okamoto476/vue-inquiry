@@ -1,7 +1,7 @@
 <template>
   <div class="contact-chat">
     <v-app>
-      <HeaderBar />
+      <Header />
       <div class="contact-chat__contents-wrapper">
         <div>
           <div v-for="item in inquiryList" :key="item.id" class="ma-5">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import HeaderBar from '../organisms/HeaderBar.vue';
+import Header from '../organisms/Header.vue';
 import MessageBox from '../organisms/MessageBox.vue';
 import {
   doc,
@@ -127,7 +127,7 @@ export default {
     },
   },
   components: {
-    HeaderBar,
+    Header,
     MessageBox,
   },
 };
