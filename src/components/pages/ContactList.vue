@@ -46,7 +46,7 @@
                 }}
               </p>
             </v-card-text>
-            <v-dialog v-model="dialog" :retain-focus="false" width="500">
+            <v-dialog v-model="isDialog" :retain-focus="false" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="primary"
@@ -86,7 +86,7 @@
                 <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="dialog = false">閉じる</v-btn>
+                  <v-btn color="primary" text @click="closeDialog">閉じる</v-btn>
                   <v-btn
                     v-if="loginUser.isAdmin"
                     color="primary"
@@ -119,7 +119,7 @@ const CATEGORY = {
 export default {
   data() {
     return {
-      dialog: false,
+      isDialog: false,
       inquiryList: [],
       targetInquiry: '',
       category: '',
@@ -194,6 +194,9 @@ export default {
         this.loading = false;
         alert('データの取得に失敗しました。ブラウザの再読み込みをしてください。');
       }
+    },
+    closeDialog() {
+      this.isDialog = false
     },
   },
   components: {

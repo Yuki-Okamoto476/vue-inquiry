@@ -42,7 +42,7 @@
             no-resize
             maxlength="2000"
           ></v-textarea>
-          <v-btn type="button" color="primary" @click="handleSubmit" :disabled="buttonDisabled"
+          <v-btn type="button" color="primary" @click="handleSubmit" :disabled="buttonDisabled" class="mt-5"
             >送信</v-btn
           >
         </v-form>
