@@ -79,16 +79,15 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('Action');
     this.getInquiry();
     this.getMessage();
   },
   methods: {
     getInquiry() {
       const unSubInquiry = onSnapshot(doc(db, 'inquiries', this.chatId), (doc) => {
-        const data_array = [];
-        data_array.push(doc.data());
-        this.inquiryList = data_array;
+        const data_list = [];
+        data_list.push(doc.data());
+        this.inquiryList = data_list;
       });
       return () => unSubInquiry();
     },
@@ -96,15 +95,15 @@ export default {
       const msgRef = collection(db, 'chats', this.chatId, 'messages');
       const q = query(msgRef, orderBy('created_at', 'asc'));
       const unSubMessage = onSnapshot(q, (querySnapshot) => {
-        const data_array = [];
+        const data_list = [];
         querySnapshot.forEach((doc) => {
-          data_array.push({
+          data_list.push({
             id: doc.id,
             isAdmin: doc.data().isAdmin,
             message: doc.data().message,
           });
         });
-        this.messageList = data_array;
+        this.messageList = data_list;
       });
       return () => unSubMessage();
     },
