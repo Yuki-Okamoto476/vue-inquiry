@@ -85,9 +85,9 @@ export default {
   methods: {
     getInquiry() {
       const unSubInquiry = onSnapshot(doc(db, 'inquiries', this.chatId), (doc) => {
-        const data_list = [];
-        data_list.push(doc.data());
-        this.inquiryList = data_list;
+        const result = [];
+        result.push(doc.data());
+        this.inquiryList = result;
       });
       return () => unSubInquiry();
     },
@@ -95,15 +95,15 @@ export default {
       const msgRef = collection(db, 'chats', this.chatId, 'messages');
       const q = query(msgRef, orderBy('created_at', 'asc'));
       const unSubMessage = onSnapshot(q, (querySnapshot) => {
-        const data_list = [];
+        const result = [];
         querySnapshot.forEach((doc) => {
-          data_list.push({
+          result.push({
             id: doc.id,
             isAdmin: doc.data().isAdmin,
             message: doc.data().message,
           });
         });
-        this.messageList = data_list;
+        this.messageList = result;
       });
       return () => unSubMessage();
     },
